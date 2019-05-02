@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import pygame
 from pygame import *
 import Enemies
@@ -5,8 +7,6 @@ import Enemies
 player_speed = 5
 player_radius = 20
 screen_width, screen_height = (800, 600)
-
-
 
 class LevelHandler():
 
@@ -97,7 +97,7 @@ class Level():
 
         return running, lost
 
-    def render(self, screen, player, player2):
+    def render(self, screen, player):
         font = pygame.font.SysFont('comicsansms', 36)
         text = font.render('Level: ' + str(self.levelnum), True, (255, 255, 255))        
         screen.fill((50, 50, 50))
@@ -108,7 +108,6 @@ class Level():
             enemy.drawenemy(screen)
 
         player.drawplayer(screen)
-        player2.drawplayer(screen)
 
     def handleevents(self, events):
         raise NotImplementedError
@@ -127,8 +126,8 @@ class Level1(Level):
     def updatelevel(self, player):
         return super().updatelevel(player)
 
-    def render(self, screen, player, player2):
-        super().render(screen, player, player2)
+    def render(self, screen, player):
+        super().render(screen, player)
 
 class Level2(Level):
 
@@ -146,8 +145,8 @@ class Level2(Level):
     def updatelevel(self, player):
         return super().updatelevel(player)
 
-    def render(self, screen, player, player2):
-        super().render(screen, player, player2)
+    def render(self, screen, player):
+        super().render(screen, player)
 
 class Level3(Level):
 
@@ -171,5 +170,5 @@ class Level3(Level):
             enemy.y = enemy.y + 1
         return super().updatelevel(player)
 
-    def render(self, screen, player, player2):
-        super().render(screen, player, player2)
+    def render(self, screen, player):
+        super().render(screen, player)

@@ -21,7 +21,6 @@ class PlayerCharacter():
         self.b = b
 
     def drawplayer(self, screen):
-        print('afsf')
         pygame.draw.circle(screen, (self.r,self.g,self.b), (self.x, self.y), self.radius)
 
     def moveplayer(self, xmove, ymove):
@@ -33,26 +32,6 @@ class PlayerCharacter():
             if coordinate[1] >= self.y-self.radius and coordinate[1] <= self.y+self.radius:
                 return True
         return False
-
-class UDPInput(Thread):
-    def __init__(self,port,screen,player):
-        super().__init__()
-        self.port = port
-        self.server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.server.bind(('0.0.0.0', self.port))
-        self.screen = screen
-        self.player = player
-
-    def run(self):
-        while True:
-            data, addr = self.server.recvfrom(1024)
-            input = data.decode()
-            x, y = input.split(',')
-            self.player.x = int(x)
-            self.player.y = int(y)
-
-    def close(self):
-        self.server.close()
 
 def runStartScreen(screen, clock, running):
     font = pygame.font.SysFont('comicsansms', 72)
@@ -105,30 +84,14 @@ def main():
     clock = pygame.time.Clock()
     runStartScreen(screen, clock, running)
     currentLevel = levelHandler.firstLevel()
-    player2 = PlayerCharacter(200,200,20,r=255,g=165,b=0)
-
-    UDP_IP_ADDRESS = "192.168.170.67"
-    UDP_SERVER_PORT_NO = 9000
-    UDP_CLIENT_PORT_NO = 9001
-
-    clientSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-    serverthread = UDPInput(UDP_CLIENT_PORT_NO, screen, player2)
-    serverthread.daemon = True
-    serverthread.start()
-    packet = 'Start'
 
     while running:
         player = PlayerCharacter(int(screen_width / 2), screen_height, player_radius)
         lost = False
-        try:
-            clientSock.sendto(packet.encode(), (UDP_IP_ADDRESS, UDP_SERVER_PORT_NO))
-        except:
-            pass
 
         while not lost:
             running, lost = currentLevel.updatelevel(player)
-            currentLevel.render(screen, player, player2)
+            currentLevel.render(screen, player)
             pygame.display.update()
 
             clock.tick(60)
